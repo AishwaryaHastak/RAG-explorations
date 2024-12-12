@@ -28,20 +28,29 @@ To create a new vector database, run the following command. You can specify the 
 ```
 python index.py --model_name "sentence-transformers/your-model" --chunk_size 500 --chunk_overlap 50 --vector_db_name "new_vector_db"
 ```
+ 
+### Parameters: 
+| Parameter                | Description                                                                                       | Default Value                  |
+|--------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
+| `--model_name`            | The model to use for generating embeddings.                                            | `sentence-transformers/all-mpnet-base-v2` |
+| `--chunk_size`            | The size of chunks for splitting the documents.                                                   | `1000`                         |
+| `--chunk_overlap`         | The overlap between chunks.                                                                       | `100`                          |
+| `--vector_db_name`        | The name of the directory where the vector database will be saved.                                | `vector_db`                    |
 
-### Parameters:
---model_name: The model to use for generating embeddings. Replace "sentence-transformers/your-model" with the desired model name (default is sentence-transformers/all-mpnet-base-v2).
---chunk_size: The size of chunks for splitting the documents (default is 1000).
---chunk_overlap: The overlap between chunks (default is 100).
---vector_db_name: The name of the directory where the vector database will be saved (default is vector_db).
 
-2. Load an Existing Vector Database
+
+
+### 2. Load an Existing Vector Database
 If you already have a saved vector database and you want to load it, use the following command:
 
 ```
 python index.py --load --vector_db_name "existing_vector_db"
 ```
-
 #### Parameters:
---load: Flag to indicate that you want to load an existing vector database.
---vector_db_name: The name of the existing vector database you want to load.
+
+| Parameter              | Description                                                                                       | Default Value                  |
+|------------------------|---------------------------------------------------------------------------------------------------|--------------------------------|
+| `--load`               | Flag to indicate that you want to load an existing vector database.                               | ` ` (no default value)         |
+| `--vector_db_name`     | The name of the existing vector database you want to load.                                        | `vector_db`                    |
+
+ 
