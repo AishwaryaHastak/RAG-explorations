@@ -59,7 +59,7 @@ class Index:
 
         :return: List of loaded documents
         """
-        pdf_files = glob.glob("./data/*") 
+        pdf_files = glob.glob("../data/*")
         # List to store all loaded documents
         documents = []
         print(f'[DEBUG] Reading {len(pdf_files)} files') 
@@ -94,14 +94,17 @@ class Index:
         all_splits = text_splitter.split_documents(documents)
         print(f'[DEBUG] Creating index with {len(all_splits)} chunks...')
         
-        # Create FAISS vector database       
-        vector_db = FAISS.from_documents(all_splits, self.embeddings)
-
+        # # Create FAISS vector database       
+        vector_db = FAISS.from_documents(all_splits, self.embeddings)   
         vector_db.save_local(folder_path = self.vector_db_name, index_name = self.vector_db_name) 
         print(f'[DEBUG] Vector database saved to {self.vector_db_name}')
 
+        # Create keyword database
         keyword_db = BM25Retriever.from_documents(all_splits, k=self.k)
-
+        with open(f'{self.keyword_db_name}.pkl', 'wb') as f:
+            pickle.dump(keyword_db, f)
+        print(f'[DEBUG] Keyword database saved to {self.keyword_db_name}')
+        
         return vector_db, keyword_db
     
     def load_index(self): 
@@ -167,10 +170,17 @@ def main():
     chunk_overlap = input() or args.chunk_overlap
     print(f"Vector DB name (default: {args.vector_db_name}): ", end="")
     vector_db_name = input() or args.vector_db_name
+    print(f"Keyword DB name (default: {args.keyword_db_name}): ", end="")
+    keyword_db_name = input() or args.keyword_db_name
+    print(f"Number of documents to return for keyword retriever (default:{args.k}): ", end="")
+    k = input() or args.k
+    print(f"Load existing database? (default: {args.load}): ", end="")
+    load = input() or args.load
 
     # Create Index object with parsed parameters
     index = Index(model_name=model_name, chunk_size=int(chunk_size), 
-                  chunk_overlap=int(chunk_overlap), vector_db_name=vector_db_name)
+                  chunk_overlap=int(chunk_overlap), vector_db_name=vector_db_name,
+                  keyword_db_name = keyword_db_name, k = k)
 
     # Conditionally either create a new index or load an existing one
     if args.load:
