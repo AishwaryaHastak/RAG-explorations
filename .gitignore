@@ -1,0 +1,3 @@
+.env
+index\vector_db
+index\keyword_db.pkl
